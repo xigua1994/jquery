@@ -32,6 +32,10 @@
 			isReady:false,
 // ready等待计数器
 			readyWait:1,
+// 用于延迟或恢复ready事件的触发。通常用在ready事件触发之前，由动态脚本加载器加载其他JavaScript脚本。
+// 其具体用法：
+// $.holdReady(true);
+// $.getScript('myplugin.js',function(){$.holdReady(false)});
 			holdReady:function(hold){
 				if ( hold ) {
 					jQuery.readyWait++;
@@ -41,7 +45,7 @@
 			},
 // 在document对象上绑定一个ready事件监听函数，当DOM结构加载完成后，监听函数被执行。
 //调用jQuery.bindReady方法创建readyList、绑定各种关于ready的事件监听方法
-			ready:function(fn){
+			ready:function(wait){
 // 如果ready事件已就绪，并且ready事件并没有被延迟或延迟已全部恢复，则执行ready事件监听函数
 // 在ready事件正常出发的情况下，wait总是undefined，如果jQuery.isReady是false，说明尚未执行过if快中的代码
 // 满足if条件表达式的后半部分，会继续执行if块中后面的代码。
@@ -53,6 +57,7 @@
 					if ( wait !== true && --jQuery.readyWait > 0 ) {
 						return;
 					}
+执行ready事件监听函数readyList。执行时第一个参数document指定ready事件监听函数的上下文，第二个参数执行了ready事件监听函数的参数
 					readyList.fireWith( document, [ jQuery ] );
 					if ( jQuery.fn.trigger ) {
 						jQuery( document ).trigger( "ready" ).off( "ready" );
